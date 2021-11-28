@@ -1,0 +1,23 @@
+@import '../../../../SCSS/_variable.scss';
+
+.side-nav {
+    top:0;
+    height: 80vh;
+    background-color: rgb(228, 239, 248); // rgb(189, 184, 184);
+    padding: 0;
+    margin: 0;
+    ul {
+        list-style-type: none;
+        padding: 0;      
+        text-align: center;  
+        li {
+            font-size: $font-size-20;
+            border: 1px solid black;     
+            cursor: pointer;       
+        }
+        .active-link {
+            background-color: $light-blue;
+            font-weight: bold;   
+        }
+    }
+}

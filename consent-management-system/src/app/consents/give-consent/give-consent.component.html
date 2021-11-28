@@ -1,0 +1,42 @@
+<div class="give-consent">
+    <div class="container">
+        <form [formGroup]="submitForm">
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" formControlName="name" placeholder="Name" />
+                </div>
+                <div class="col-6">
+                    <input type="text" formControlName="email" placeholder="Email" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    I agree to:
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                        <div class="consent-agreement">
+                            <div>
+                                <input type="checkbox" formControlName="aggrement1" (change)="onAggrement()" />
+                                <span>Receive newsletter</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" formControlName="aggrement2" (change)="onAggrement()"/>
+                                <span>Be shown targeted ads</span>
+                            </div>
+                            <div>
+                                <input type="checkbox" formControlName="aggrement3" (change)="onAggrement()" />
+                                <span>Contribute to anonymous visit statistics</span>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 pt-1">
+                    <app-button caption="Give consent" (onClick)="submitConsent()" [enableButton]="enableButton" ></app-button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

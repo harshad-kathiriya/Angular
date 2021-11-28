@@ -1,0 +1,12 @@
+@import '../../../../SCSS/_variable.scss';
+
+.app-button {
+    .button {
+        background-color: $primary-color;
+        border-radius: 5px;
+        color: white;
+        border:1px solid black;
+        font-size: $font-size-18;
+        font-weight: bold;
+    }
+}
