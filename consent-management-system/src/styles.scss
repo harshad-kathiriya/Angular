@@ -37,7 +37,7 @@ $consent-management-system-theme: mat.define-light-theme((
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
-@import '/src/SCSS/_variable.scss';
+@import './scss/variable';
 
 
 html, body { height: 100%; }

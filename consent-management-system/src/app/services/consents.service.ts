@@ -25,7 +25,9 @@ export class ConsentsService {
         // return this.http.get<ConsentsDTO[]>(`${environment.consentAPI.v1}consents`)
         //     .pipe(map((res: any) => res));
         return of<any>({
-            consents: this.consents,
+            consents: this.consents.map( (item) => {
+                return item;
+            }),
             totalRecords: this.consents.length
         });
     }

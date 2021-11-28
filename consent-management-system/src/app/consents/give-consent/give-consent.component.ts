@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ConsentsDTO } from 'src/app/DTO/ConsentsDTO';
+import { ConsentsEnum } from 'src/app/enums/consents.enum';
 import { AddConsents } from 'src/app/store/actions/consents.action';
 import { State } from 'src/app/store/redecuers';
 
@@ -52,9 +53,12 @@ export class GiveConsentComponent implements OnInit{
         name: this.submitForm.get('name')?.value,
         email:this.submitForm.get('email')?.value,
         aggrements: [
-          this.submitForm.get('aggrement1')?.value,
-          this.submitForm.get('aggrement2')?.value,
-          this.submitForm.get('aggrement3')?.value
+          this.submitForm.get('aggrement1') && this.submitForm.get('aggrement1')?.value ?
+             ConsentsEnum.AGGREMENT1 : '',
+          this.submitForm.get('aggrement2') && this.submitForm.get('aggrement2')?.value ?
+            ConsentsEnum.AGGREMENT2 : '',
+          this.submitForm.get('aggrement3') && this.submitForm.get('aggrement3')?.value ?
+            ConsentsEnum.AGGREMENT3 : ''          
         ]
       }; 
       this.store.dispatch(AddConsents({ payload: consentsDTO}));
