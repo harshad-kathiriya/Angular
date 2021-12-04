@@ -1,5 +1,5 @@
 <div class="list-consents">
-    <mat-table [dataSource]="consentsData">
+    <mat-table [dataSource]="consentsPaginateData">
 
         <ng-container matColumnDef="name">
             <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
@@ -20,7 +20,6 @@
         <mat-header-row *matHeaderRowDef="tableColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: tableColumns;"></mat-row>
     </mat-table>
-    <mat-paginator [pageSizeOptions]="[2, 5, 10, 20]" 
-        showFirstLastButtons="true" hidePageSize="true" >
-    </mat-paginator>
+    <app-pagination (changePerPage)="onPageChange($event)" (prevPage)="onPrevPage($event)"
+        (nextPage)="onNextPage($event)" [totalRecords]="totalRecords" [pageSize]="pageSize"></app-pagination>
 </div>

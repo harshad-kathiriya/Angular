@@ -1,5 +1,5 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ConsentsDTO } from 'src/app/DTO/ConsentsDTO';
@@ -24,8 +24,8 @@ export class GiveConsentComponent implements OnInit{
     private router: Router) {
     
     this.submitForm = this.fb.group({
-      name: new FormControl(null),
-      email: new FormControl(null),
+      name: new FormControl(null, [Validators.required]),
+      email: new FormControl(null, [Validators.required,Validators.email]),
       aggrement1: new FormControl(null),
       aggrement2: new FormControl(null),
       aggrement3: new FormControl(null)
@@ -46,9 +46,21 @@ export class GiveConsentComponent implements OnInit{
       }
   }
 
+  isRequireField(field: 'name' | 'email') {
+    let control = this.submitForm.get(field);
+
+    return control?.hasError("required") && control?.markAsTouched({ onlySelf: true});
+  }
+  isEmailValid(field: 'email') {
+    let control = this.submitForm.get(field);
+
+    return control?.hasError("email") && control?.markAsTouched({ onlySelf: true});
+  }
   submitConsent()  {
 
     if(this.submitForm.valid) {
+      
+      // build consents dto
       let consentsDTO:ConsentsDTO = {
         name: this.submitForm.get('name')?.value,
         email:this.submitForm.get('email')?.value,
@@ -61,10 +73,19 @@ export class GiveConsentComponent implements OnInit{
             ConsentsEnum.AGGREMENT3 : ''          
         ]
       }; 
+
+      // add consents
       this.store.dispatch(AddConsents({ payload: consentsDTO}));
 
       // redirect to list page
       this.router.navigate(['/consents']);
+
+    } else {
+      // validate controls
+      Object.keys(this.submitForm.controls).forEach(field => { 
+        const control = this.submitForm.get(field);            
+        control?.markAsTouched({ onlySelf: true });    
+      });
     }
 
   }

@@ -7,7 +7,8 @@ import { ListConsentsComponent } from "./list-consents/list-consents.component";
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { CommonModule } from "@angular/common";
-
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInputModule } from '@angular/material/input'
 
 @NgModule({
    declarations: [
@@ -21,7 +22,9 @@ import { CommonModule } from "@angular/common";
     FormsModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatCheckboxModule,
+    MatInputModule
    ]
 })
 

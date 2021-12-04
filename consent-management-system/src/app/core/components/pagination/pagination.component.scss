@@ -1,0 +1,24 @@
+@import '../../../../scss/variable';
+
+.pagination {
+    border: 1px solid black;
+    border-radius: 0;
+    align-items: center;
+    .page-number{
+        .page {
+            cursor: pointer;
+            color: rgb(64, 159, 190);            
+            text-decoration: underline;
+        }
+        .selected {
+            color: blue;
+            text-decoration: underline;
+        }
+    }
+    .pagination-button {
+        color: blue;
+        &.mat-button-disabled {
+            color: lightblue;
+        }
+    }
+}

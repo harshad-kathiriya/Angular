@@ -1,0 +1,16 @@
+<div class="d-flex justify-content-between pagination" *ngIf="totalPages != 0"  >  
+    <div class="prev p2">
+        <button mat-button (click)="onPrev()" class="pagination-button" [disabled]="disablePrev"><< Previous page</button>
+    </div>
+    <div class="p-2"> 
+        <div class="page-number">
+            <span *ngFor="let page of pages()" class="page" 
+                [ngClass]="currentPage==page? 'selected' : ''" (click)="onChangePerPage(page)"> 
+                {{page}}
+            </span>
+        </div>
+    </div>
+    <div class="next p-2">
+        <button mat-button (click)="onNext()" class="pagination-button" [disabled]="disableNext"> Next page >></button>
+    </div>
+</div>

@@ -2,5 +2,41 @@
 
 .list-consents {
 
-    
+    .mat-table {
+        border: 1px solid black;
+        .mat-header-row {
+            justify-content: center;
+            .mat-header-cell {
+                border: 1px solid black;
+                color: black;
+                font-size: 15px;
+                &.mat-column-name {
+                    justify-content: center;
+                    padding-left: 0.2rem;
+                } 
+                &.mat-column-email {
+                    justify-content: center;
+                    padding-left: 0.2rem;
+                } 
+                &.mat-column-aggrements {
+                    padding-left: 0.2rem;
+                }
+            }
+            
+        }
+        .mat-row {
+            .mat-cell {
+                border: 1px solid black;
+                &.mat-column-name {
+                    padding-left: 0.2rem;                    
+                } 
+                &.mat-column-email {
+                    padding-left: 0.2rem;
+                } 
+                &.mat-column-aggrements {
+                    padding-left: 0.2rem;
+                }
+            }
+        }
+    }
 }

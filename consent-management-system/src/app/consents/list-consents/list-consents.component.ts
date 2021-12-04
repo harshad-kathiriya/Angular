@@ -1,28 +1,32 @@
 import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { select, Store } from '@ngrx/store';
+import { slice } from 'lodash';
 import { Observable } from 'rxjs';
 import { ConsentsDTO } from 'src/app/DTO/ConsentsDTO';
 import { GetConsents } from 'src/app/store/actions';
 import { State } from 'src/app/store/redecuers';
 import { getConsents } from 'src/app/store/selectors';
-import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-list-consents',
   templateUrl: './list-consents.component.html',
   styleUrls: ['./list-consents.component.scss']
 })
-export class ListConsentsComponent implements OnInit, OnDestroy, AfterViewInit {
+
+export class ListConsentsComponent implements OnInit, OnDestroy{
 
   public consents$: Observable<ConsentsDTO[]> | null = null
   private consentsSub: any = null;
-  public consentsData: any | null; 
+  public consentsData: any | null;
+  public consentsPaginateData: any | null;
+   
+  public totalRecords: number = 0;
+  public currentPage: number = 1;
+  public pageSize: number = 2;
   // columns
   public tableColumns: string[] = ['name', 'email', 'aggrements'];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
-  
   constructor(private store: Store<State>) {
   }
 
@@ -32,11 +36,13 @@ export class ListConsentsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.consents$ = this.store.pipe(select(getConsents));
     this.consentsSub = this.consents$.subscribe((items: any) => {
       if(items && items.consents && items.consents.length > 0) {
-        this.consentsData = new MatTableDataSource<ConsentsDTO[]>(items.consents); 
-        console.log(items.consents);
+        this.consentsData = items.consents; // new MatTableDataSource<ConsentsDTO[]>(items.consents); 
+        this.totalRecords = items && items.consents ? items.consents.length : 0;
+        this.onPaginate();
       }
     }); 
   }
+
 
   ngOnDestroy() {
     if(this.consentsSub) {
@@ -44,10 +50,23 @@ export class ListConsentsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngAfterViewInit() {
-    if(this.consentsData) {
-      this.consentsData.paginator = this.paginator;
-    }
+  onPageChange(page: any) {
+    this.currentPage = page; 
+    this.onPaginate();   
   }
 
+  onPrevPage(page: any) {
+    this.currentPage = page;
+    this.onPaginate();
+  }
+
+  onNextPage(page: any) {
+    this.currentPage = page;
+    this.onPaginate();
+  }
+
+  onPaginate()  {
+    let result: ConsentsDTO[][] = slice(this.consentsData, (this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+    this.consentsPaginateData = new MatTableDataSource<ConsentsDTO[]>(result);
+  }
 }

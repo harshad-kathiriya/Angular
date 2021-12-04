@@ -1,8 +1,15 @@
 .give-consent {
     text-align: center;
-    .consent-agreement {
-        border: 1px solid black;
-        text-align: left;
-        padding-left: 0.3rem;
+    .form-container {
+        width: 50%;
+        .submit-form-field {
+            width: 100%;
+        }
+
+        .consent-agreement {
+            border: 1px solid black;
+            text-align: left;
+            padding-left: 0.3rem;
+        }
     }
 }
