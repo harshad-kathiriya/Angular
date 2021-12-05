@@ -1,59 +1,60 @@
 <div class="give-consent">
-    <form [formGroup]="submitForm">            
-        <table class="form-container" cellspacing="0"><tr>
-            <td>
-                <mat-form-field class="submit-form-field">
-                    <input matInput  type="text" formControlName="name" placeholder="Name" />
-                    <mat-error *ngIf="isRequireField('name')">
-                        Name is required.
-                    </mat-error>
-                </mat-form-field>
-            </td>
-            <td>
-                <mat-form-field class="submit-form-field">
-                    <input matInput type="text" formControlName="email" placeholder="Email" />
-                    <mat-error *ngIf="isEmailValid('email') && !isRequireField('email') ">
-                        Please enter a valid email address
-                    </mat-error>
-                    <mat-error *ngIf="isRequireField('email')">
-                        Email is required.
-                    </mat-error>
-                </mat-form-field>   
-            </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                I agree to:
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                <div class="consent-agreement">
-                    <div>
-                        <mat-checkbox  formControlName="aggrement1" (change)="onAggrement()" > 
-                            Receive newsletter
-                        </mat-checkbox>
-                    </div>
-                    <div>
-                        <mat-checkbox  formControlName="aggrement2" (change)="onAggrement()"> 
-                            Be shown targeted ads
-                        </mat-checkbox>
-                    </div>
-                    <div>
-                        <mat-checkbox formControlName="aggrement3" (change)="onAggrement()" >
-                            Contribute to anonymous visit statistics
-                        </mat-checkbox>
-                    </div>
-                </div>
-    
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                <app-button caption="Give consent" (onClick)="submitConsent()" [enableButton]="enableButton" ></app-button>
-                </td>
-            </tr>
-        </table>    
-    </form>
-        
+    <div class="row">
+        <form [formGroup]="submitForm">            
+                <table class="form-container" cellspacing="0"><tr>
+                    <td>
+                        <mat-form-field class="submit-form-field">
+                            <input matInput  type="text" formControlName="name" placeholder="Name" />
+                            <mat-error *ngIf="isRequireField('name')">
+                                Name is required.
+                            </mat-error>
+                        </mat-form-field>
+                    </td>
+                    <td>
+                        <mat-form-field class="submit-form-field">
+                            <input matInput type="text" formControlName="email" placeholder="Email" />
+                            <mat-error *ngIf="isEmailValid('email') && !isRequireField('email') ">
+                                Please enter a valid email address
+                            </mat-error>
+                            <mat-error *ngIf="isRequireField('email')">
+                                Email is required.
+                            </mat-error>
+                        </mat-form-field>   
+                    </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        I agree to:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        <div class="consent-agreement">
+                            <div>
+                                <mat-checkbox  formControlName="aggrement1" (change)="onAggrement()" > 
+                                    Receive newsletter
+                                </mat-checkbox>
+                            </div>
+                            <div>
+                                <mat-checkbox  formControlName="aggrement2" (change)="onAggrement()"> 
+                                    Be shown targeted ads
+                                </mat-checkbox>
+                            </div>
+                            <div>
+                                <mat-checkbox formControlName="aggrement3" (change)="onAggrement()" >
+                                    Contribute to anonymous visit statistics
+                                </mat-checkbox>
+                            </div>
+                        </div>
+            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        <app-button caption="Give consent" (onClick)="submitConsent()" [enableButton]="enableButton" ></app-button>
+                        </td>
+                    </tr>
+                </table>    
+        </form>
+    </div>    
 </div>
