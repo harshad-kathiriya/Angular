@@ -1,4 +1,4 @@
-
+// consents dto
 export class ConsentsDTO {
     name: string;
     email: string;

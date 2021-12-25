@@ -7,7 +7,7 @@ import { ConsentsEnum } from 'src/app/enums/consents.enum';
 import { AddConsents } from 'src/app/store/actions/consents.action';
 import { State } from 'src/app/store/redecuers';
 
-
+// give consent component
 @Component({
   selector: 'app-give-consent',
   templateUrl: './give-consent.component.html',
@@ -36,6 +36,7 @@ export class GiveConsentComponent implements OnInit{
 
   }
 
+  // enable button 
   onAggrement() {
     if(this.submitForm.get('aggrement1')?.value === true 
       ||  this.submitForm.get('aggrement2')?.value === true
@@ -46,20 +47,24 @@ export class GiveConsentComponent implements OnInit{
       }
   }
 
+  // check fields
   isRequireField(field: 'name' | 'email') {
     let control = this.submitForm.get(field);
 
     return control?.hasError("required") && control?.markAsTouched({ onlySelf: true});
   }
+
+  // validate email
   isEmailValid(field: 'email') {
     let control = this.submitForm.get(field);
 
     return control?.hasError("email") && control?.markAsTouched({ onlySelf: true});
   }
+
+  // submit event
   submitConsent()  {
 
     if(this.submitForm.valid) {
-      
       // build consents dto
       let consentsDTO:ConsentsDTO = {
         name: this.submitForm.get('name')?.value,

@@ -1,7 +1,3 @@
-
-// currently, service is not a part of the app, will be added later on.
-// just implement for demo purpose.
-
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, of } from "rxjs";
@@ -9,6 +5,7 @@ import { environment } from "src/environments/environment";
 import { ConsentsDTO } from "../DTO/ConsentsDTO";
 import { map } from 'rxjs/operators';
 
+// consent service
 @Injectable({
     providedIn: 'root'
 })

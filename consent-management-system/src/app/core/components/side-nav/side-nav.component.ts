@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+// left side navigation component
 @Component({
   selector: 'app-side-nav',
   templateUrl: './side-nav.component.html',

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
+// pagination component
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
@@ -11,10 +12,10 @@ export class PaginationComponent implements OnInit {
   public totalPages: number = 0;
   public disableNext: boolean = false;
   public disablePrev: boolean = false;
-  
+  // input event
   @Input() totalRecords: number  = 0;
   @Input() pageSize: number = 2;
-    
+  // output event
   @Output() changePerPage: EventEmitter<any> = new EventEmitter<any>();
   @Output() nextPage: EventEmitter<any> = new EventEmitter<any>();
   @Output() prevPage: EventEmitter<any> = new EventEmitter<any>();
@@ -29,10 +30,12 @@ export class PaginationComponent implements OnInit {
     this.getTotalPages();
   }
 
+  // get total pages
   getTotalPages() {
     this.totalPages = this.totalRecords ? Math.ceil(this.totalRecords / this.pageSize) : 0;
   }
-
+  
+  // get pages 
   pages() {
     let pages: any[] = [];
 
@@ -77,27 +80,28 @@ export class PaginationComponent implements OnInit {
     }
     return pages;
   }
-
+  // change page
   onChangePerPage(page: any){
     this.currentPage = page;
     this.disablePrevNextButton();      
     this.changePerPage.emit(page);
   }
-
+  // set previous page
   onPrev() {
     this.currentPage = this.currentPage - 1;
     this.disablePrevNextButton();
     this.prevPage.emit(this.currentPage);
   }
 
+  // set next page
   onNext() {
     this.currentPage = this.currentPage + 1;
     this.disablePrevNextButton();
     this.nextPage.emit(this.currentPage);
   }
 
+  // disable prev/next button  
   disablePrevNextButton() {
-    // disable prev/next button
     this.disablePrev = this.currentPage === 1 ? true : false ;
     this.disableNext = this.totalPages === this.currentPage ? true : false;    
   }

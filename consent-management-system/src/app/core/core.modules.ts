@@ -7,6 +7,7 @@ import { PaginationComponent } from "./components/pagination/pagination.componen
 import { SideNavComponent } from "./components/side-nav/side-nav.component";
 import { ButtonComponent } from "./controls/button/button.component";
 
+// core module
 @NgModule({
     declarations: [
         SideNavComponent,

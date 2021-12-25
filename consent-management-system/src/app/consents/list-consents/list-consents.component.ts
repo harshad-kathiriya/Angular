@@ -8,6 +8,7 @@ import { GetConsents } from 'src/app/store/actions';
 import { State } from 'src/app/store/redecuers';
 import { getConsents } from 'src/app/store/selectors';
 
+// list consent component
 @Component({
   selector: 'app-list-consents',
   templateUrl: './list-consents.component.html',
@@ -36,7 +37,7 @@ export class ListConsentsComponent implements OnInit, OnDestroy{
     this.consents$ = this.store.pipe(select(getConsents));
     this.consentsSub = this.consents$.subscribe((items: any) => {
       if(items && items.consents && items.consents.length > 0) {
-        this.consentsData = items.consents; // new MatTableDataSource<ConsentsDTO[]>(items.consents); 
+        this.consentsData = items.consents; 
         this.totalRecords = items && items.consents ? items.consents.length : 0;
         this.onPaginate();
       }
@@ -49,22 +50,25 @@ export class ListConsentsComponent implements OnInit, OnDestroy{
       this.consentsSub.unsubscribe();
     }
   }
-
+  // page change event
   onPageChange(page: any) {
     this.currentPage = page; 
     this.onPaginate();   
   }
 
+  // previous page event
   onPrevPage(page: any) {
     this.currentPage = page;
     this.onPaginate();
   }
 
+  // next page event
   onNextPage(page: any) {
     this.currentPage = page;
     this.onPaginate();
   }
 
+  // set pagination 
   onPaginate()  {
     let result: ConsentsDTO[][] = slice(this.consentsData, (this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
     this.consentsPaginateData = new MatTableDataSource<ConsentsDTO[]>(result);

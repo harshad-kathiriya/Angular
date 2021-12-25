@@ -3,6 +3,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { GiveConsentComponent } from "./give-consent/give-consent.component";
 import { ListConsentsComponent } from "./list-consents/list-consents.component";
 
+// consent routes
 export const routes: Routes = [
     {
         path:'',
