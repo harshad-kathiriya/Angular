@@ -33,51 +33,52 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 Here is the list of unit test write down for this app.
 
 ```sh
-SideNavComponent
-    √ should create
-  ListConsentsComponent
-    √ should get next page
-    √ should create
-    √ should get previous page
-    √ should change page
-    √ should get pagination data
   ButtonComponent
     √ should create
-  PaginationComponent
-    √ should get second page
-    √ should get fourth page
-    √ should get last page
-    √ should disable prev button
+  SideNavComponent
     √ should create
-    √ should disable next button
-    √ should change page
-    √ should get first page
-    √ should get prev page
-    √ should get total pages
-    √ should get next page
   GiveConsentComponent
-    √ name should be required field
-    √ should submit the form
-    √ email should be valid
     √ should disable button if aggrement is not selected
-    √ should enable button if all aggrements are selected
-    √ should create
     √ should enable button if aggrement is selected
+    √ should submit the form
+    √ should create
+    √ should enable button if all aggrements are selected
+    √ name should be required field
+    √ email should be valid
+  ListConsentsComponent
+    √ should change page
+    √ should get next page
+    √ should get pagination data
+    √ should get previous page
+    √ should create
   AppComponent
     √ should have as title 'Consent Management System'
     √ should create the app
+  PaginationComponent
+    √ should disable prev button
+    √ should get first page
+    √ should get second page
+    √ should disable next button
+    √ should get last page
+    √ should change page
+    √ should get fourth page
+    √ should get next page
+    √ should create
+    √ should get total pages
+    √ should get prev page
 
-Finished in 1.004 secs / 0.844 secs @ 18:58:52 GMT+0530 (India Standard Time)
+Finished in 1.415 secs / 1.109 secs @ 14:20:35 GMT+0530 (India Standard Time)
 
 SUMMARY:
 √ 27 tests completed
 
 =============================== Coverage summary ===============================
-Statements   : 97.88% ( 139/142 )
+Statements   : 97.94% ( 143/146 )
 Branches     : 73.27% ( 85/116 )
 Functions    : 93.75% ( 30/32 )
-Lines        : 98.44% ( 127/129 )
+Lines        : 98.48% ( 130/132 )
 ================================================================================
+
 ```
 ## Running end-to-end tests (will add later on)
 
