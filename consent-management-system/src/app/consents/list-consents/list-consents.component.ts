@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Title } from '@angular/platform-browser';
 import { select, Store } from '@ngrx/store';
 import { slice } from 'lodash';
 import { Observable } from 'rxjs';
@@ -28,10 +29,11 @@ export class ListConsentsComponent implements OnInit, OnDestroy{
   // columns
   public tableColumns: string[] = ['name', 'email', 'aggrements'];
 
-  constructor(private store: Store<State>) {
+  constructor(private store: Store<State>, private titleService: Title) {
   }
 
   ngOnInit(): void {
+    this.titleService.setTitle("Consents");
     this.store.dispatch(GetConsents());
 
     this.consents$ = this.store.pipe(select(getConsents));

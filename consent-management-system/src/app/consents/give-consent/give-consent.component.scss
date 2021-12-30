@@ -1,7 +1,12 @@
 .give-consent {
     text-align: center;
     .form-container {
-        width: 50%;
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        .form-table {
+            width: inherit;
+        }
         .submit-form-field {
             width: 100%;
         }

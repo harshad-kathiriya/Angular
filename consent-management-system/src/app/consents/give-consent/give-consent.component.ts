@@ -1,5 +1,6 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ConsentsDTO } from 'src/app/DTO/ConsentsDTO';
@@ -21,7 +22,8 @@ export class GiveConsentComponent implements OnInit{
   constructor(
     private fb: FormBuilder, 
     private store: Store<State>,
-    private router: Router) {
+    private router: Router,
+    private titleService: Title) {
     
     this.submitForm = this.fb.group({
       name: new FormControl(null, [Validators.required]),
@@ -33,7 +35,7 @@ export class GiveConsentComponent implements OnInit{
    }
 
   ngOnInit(): void {
-
+    this.titleService.setTitle("Give consent");
   }
 
   // enable button 
