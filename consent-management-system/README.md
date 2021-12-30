@@ -1,5 +1,19 @@
 # Consent Management System
 
+### 1. Consent collection form
+
+A form that allows a user to enter her name, email address and to select data processes that she agrees to.
+
+![Mockup](https://github.com/harshad-kathiriya/Angular-Projects/blob/main/consent-management-system/screenshots/give-consent.png)
+
+
+### 2. Consent management
+
+A list of consents that were given by users. This view simply displays items from a list with client-side pagination.
+
+![Mockup](https://github.com/harshad-kathiriya/Angular-Projects/blob/main/consent-management-system/screenshots/consents.png)
+
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
@@ -15,6 +29,8 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 ## Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+Here is the list of unit test write down for this app.
 
 ```sh
 SideNavComponent
