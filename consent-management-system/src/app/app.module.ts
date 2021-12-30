@@ -14,6 +14,7 @@ import { ConsentsService } from './services/consents.service';
 import { EffectsModule } from '@ngrx/effects';
 import { effects } from './store/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { httpInterceptorProviders } from './http-interceptors';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   providers: [
     Title,
-    ConsentsService
+    ConsentsService, 
+    httpInterceptorProviders       
   ],
   bootstrap: [AppComponent],
 })
