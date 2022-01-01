@@ -1,0 +1,2475 @@
+{
+    "pipes": [],
+    "interfaces": [
+        {
+            "name": "ConsentsState",
+            "id": "interface-ConsentsState-d6dca15ba37f5d1d86d4dbb0eb264168cac2d6114cf9c802c0a26eb3a6d5dfd0413d5aba1ed1bfb43578bb518b68fc9857e635909500da2b5ce444441b08accb",
+            "file": "src/app/store/redecuers/consents.reducer.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { createReducer, on, State } from \"@ngrx/store\";\r\nimport { ConsentsDTO } from \"src/app/DTO/ConsentsDTO\";\r\nimport { AddConsents, AddConsentsFail, AddConsentsSuccess, GetConsents, GetConsentsFail, GetConsentsSuccesss } from \"../actions\";\r\n\r\nexport interface ConsentsState {\r\n    consents: ConsentsDTO[],\r\n    loading: boolean\r\n}\r\n\r\nexport const initialState: ConsentsState = {\r\n    consents: [],\r\n    loading: false\r\n};\r\n\r\nexport const consentsReducer = createReducer(\r\n    initialState,\r\n    on(AddConsents, state => ({...state, loading: true}) ),\r\n    on(AddConsentsSuccess, state => ({...state, loading: false})),\r\n    on(AddConsentsFail, state => ({...state, loading: false })),\r\n    \r\n    on(GetConsents, state => ({...state, loading: true })),\r\n    on(GetConsentsSuccesss, (state,{ payload }) => ({...state, consents: payload, loading: false })),\r\n    on(GetConsentsFail, state => ({...state, loading: false }))\r\n    \r\n);\r\n\r\n",
+            "properties": [
+                {
+                    "name": "consents",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ConsentsDTO[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 6
+                },
+                {
+                    "name": "loading",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 165,
+            "methods": []
+        },
+        {
+            "name": "State",
+            "id": "interface-State-8560d509e37f71345a11b3eb190668a496cd9fcd52e7b27a985aeb62d4bd319dcd8a0584d44263f7badd14721f78da9c3d7118ef552074161a85391fbbd4537f",
+            "file": "src/app/store/redecuers/index.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "interface",
+            "sourceCode": "import { ActionReducerMap, MetaReducer } from '@ngrx/store';\r\nimport { environment } from 'src/environments/environment';\r\nimport * as consentsReducer from '../redecuers/consents.reducer';\r\n\r\nexport interface State {\r\n    consentsReducer: consentsReducer.ConsentsState\r\n}\r\n\r\nexport const reducers: ActionReducerMap<State> = {\r\n    consentsReducer: consentsReducer.consentsReducer\r\n}\r\n\r\nexport const metaReducers: MetaReducer<State>[] = [];\r\n",
+            "properties": [
+                {
+                    "name": "consentsReducer",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "consentsReducer.ConsentsState",
+                    "optional": false,
+                    "description": "",
+                    "line": 7
+                }
+            ],
+            "indexSignatures": [],
+            "kind": 165,
+            "methods": []
+        }
+    ],
+    "injectables": [
+        {
+            "name": "ConsentsEffects",
+            "id": "injectable-ConsentsEffects-f73b503905b59e41150a397f758cb5cd39731e29f9a4a38a88111c30d9ccad70bb4e2cd86f2a1f38dbfebc154a79792787b06d419861a0472ec0a6289e71b876",
+            "file": "src/app/store/effects/consents.effect.ts",
+            "properties": [
+                {
+                    "name": "AddConsents$",
+                    "defaultValue": "createEffect(() => \r\n        this.actions$.pipe(\r\n            ofType(ConsentActionTypes.ADD_CONSENTS),\r\n            switchMap((action: any) => this.consentsService.setConsents(action.payload)\r\n                .pipe(\r\n                    map((consents: ConsentsDTO) => AddConsentsSuccess({payload: consents})),\r\n                    catchError((error) => of(AddConsentsFail({payload: error})))\r\n                ) \r\n            )\r\n        )\r\n    )",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 29
+                },
+                {
+                    "name": "getConsents$",
+                    "defaultValue": "createEffect(() => \r\n        this.actions$.pipe(\r\n            ofType(ConsentActionTypes.GET_CONSENTS),\r\n            switchMap((action) => this.consentsService.getConsents()\r\n                .pipe(\r\n                    map((consents: ConsentsDTO[]) => GetConsentsSuccesss({payload: consents})),\r\n                    catchError((error) => of(GetConsentsFail({payload: error})))\r\n                ) \r\n            )\r\n        )\r\n    )",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "optional": false,
+                    "description": "",
+                    "line": 17
+                }
+            ],
+            "methods": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { Injectable } from \"@angular/core\";\r\nimport { Actions, createEffect, ofType } from \"@ngrx/effects\";\r\nimport { of } from \"rxjs\";\r\nimport { catchError, map, switchMap } from \"rxjs/operators\";\r\nimport { ConsentsDTO } from \"src/app/DTO/ConsentsDTO\";\r\nimport { ConsentsService } from \"src/app/services/consents.service\";\r\nimport { AddConsentsFail, AddConsentsSuccess, ConsentActionTypes, GetConsentsFail, GetConsentsSuccesss } from \"../actions\";\r\n\r\n@Injectable()\r\nexport class ConsentsEffects {\r\n\r\n    constructor( \r\n        private actions$: Actions,\r\n        private consentsService: ConsentsService\r\n        ) {};\r\n\r\n    getConsents$ = createEffect(() => \r\n        this.actions$.pipe(\r\n            ofType(ConsentActionTypes.GET_CONSENTS),\r\n            switchMap((action) => this.consentsService.getConsents()\r\n                .pipe(\r\n                    map((consents: ConsentsDTO[]) => GetConsentsSuccesss({payload: consents})),\r\n                    catchError((error) => of(GetConsentsFail({payload: error})))\r\n                ) \r\n            )\r\n        )\r\n    );\r\n\r\n    AddConsents$ = createEffect(() => \r\n        this.actions$.pipe(\r\n            ofType(ConsentActionTypes.ADD_CONSENTS),\r\n            switchMap((action: any) => this.consentsService.setConsents(action.payload)\r\n                .pipe(\r\n                    map((consents: ConsentsDTO) => AddConsentsSuccess({payload: consents})),\r\n                    catchError((error) => of(AddConsentsFail({payload: error})))\r\n                ) \r\n            )\r\n        )\r\n    );\r\n\r\n}\r\n\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "consentsService",
+                        "type": "ConsentsService",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 10,
+                "jsdoctags": [
+                    {
+                        "name": "actions$",
+                        "type": "Actions",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "consentsService",
+                        "type": "ConsentsService",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        },
+        {
+            "name": "ConsentsService",
+            "id": "injectable-ConsentsService-644611913237faa5bc2d37999dc64b4a1666e9c11fd497f587c65d4865d1ee0589b334a8d60cc6295041025a2b21ab58f6b167b2ea853481025d48cec413022c",
+            "file": "src/app/services/consents.service.ts",
+            "properties": [],
+            "methods": [
+                {
+                    "name": "getConsents",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "Observable<any>",
+                    "typeParameters": [],
+                    "line": 20,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "setConsents",
+                    "args": [
+                        {
+                            "name": "consent",
+                            "type": "ConsentsDTO",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<ConsentsDTO>",
+                    "typeParameters": [],
+                    "line": 25,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "consent",
+                            "type": "ConsentsDTO",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { HttpClient } from \"@angular/common/http\";\r\nimport { Injectable } from \"@angular/core\";\r\nimport { Observable, of } from \"rxjs\";\r\nimport { environment } from \"src/environments/environment\";\r\nimport { ConsentsDTO } from \"../DTO/ConsentsDTO\";\r\nimport { map } from 'rxjs/operators';\r\n\r\n// consent service\r\n@Injectable({\r\n    providedIn: 'root'\r\n})\r\n\r\nexport class ConsentsService {\r\n    \r\n\r\n    constructor(private http: HttpClient) {\r\n    }\r\n\r\n\r\n    getConsents() : Observable<any> {\r\n        return this.http.get<ConsentsDTO[]>(`/consents`)\r\n            .pipe(map((res: any) => res));\r\n    }\r\n    \r\n    setConsents(consent: ConsentsDTO) : Observable<ConsentsDTO> {\r\n        return this.http.post<ConsentsDTO>(`/consents`, consent)\r\n            .pipe(map((res:any) => res));\r\n    }    \r\n\r\n} ",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 13,
+                "jsdoctags": [
+                    {
+                        "name": "http",
+                        "type": "HttpClient",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "injectable"
+        }
+    ],
+    "guards": [],
+    "interceptors": [
+        {
+            "name": "MockHttpInterceptor",
+            "id": "injectable-MockHttpInterceptor-6f794d441ab204c27b1f37c060697d66e84b5c2861bf175a4712d098140470758cac427963182fe79b180bed5ef6e73f3dc4ea0eb4cd57f444ceeb0872ae752b",
+            "file": "src/app/http-interceptors/mockHttpInterceptor.ts",
+            "properties": [
+                {
+                    "name": "consents",
+                    "defaultValue": "[\r\n        { name:'Jack Smith', email:'jack.smith@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Mary Williams', email:'Mary.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Robert Miller', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Contribute to anonymous visit statistics\" ] },    \r\n        { name:'Richard Davis', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Michael Garcia', email:'Susan.Williams@test.com', aggrements: [ \"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Elizabeth Johnson', email:'Elizabeth.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Linda Williams', email:'Linda.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Jessica Davis', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Joseph Garcia', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\" ] },\r\n        { name:'Thomas Brown', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Margaret Miller', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Contribute to anonymous visit statistics\" ] },    \r\n        { name:'Jessica Davis', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Sarah Garcia', email:'Susan.Williams@test.com', aggrements: [ \"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n    ]",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ConsentsDTO[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 12,
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "methods": [
+                {
+                    "name": "intercept",
+                    "args": [
+                        {
+                            "name": "request",
+                            "type": "HttpRequest<any>",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "Observable<HttpEvent<any>>",
+                    "typeParameters": [],
+                    "line": 30,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "request",
+                            "type": "HttpRequest<any>",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        },
+                        {
+                            "name": "next",
+                            "type": "HttpHandler",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "description": "",
+            "rawdescription": "\n",
+            "sourceCode": "import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from \"@angular/common/http\";\r\nimport { Injectable, Injector } from \"@angular/core\";\r\nimport { Observable, of } from \"rxjs\";\r\nimport { ConsentsDTO } from \"../DTO/ConsentsDTO\";\r\n\r\n// intercept http request to return fake data.\r\n\r\n@Injectable()\r\nexport class MockHttpInterceptor implements HttpInterceptor {\r\n\r\n    // fake data \r\n    public consents: ConsentsDTO[]  = [\r\n        { name:'Jack Smith', email:'jack.smith@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Mary Williams', email:'Mary.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Robert Miller', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Contribute to anonymous visit statistics\" ] },    \r\n        { name:'Richard Davis', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Michael Garcia', email:'Susan.Williams@test.com', aggrements: [ \"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Elizabeth Johnson', email:'Elizabeth.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Linda Williams', email:'Linda.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Jessica Davis', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Joseph Garcia', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\" ] },\r\n        { name:'Thomas Brown', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Margaret Miller', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Contribute to anonymous visit statistics\" ] },    \r\n        { name:'Jessica Davis', email:'Susan.Williams@test.com', aggrements: [ \"Receive newsletter\",\"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n        { name:'Sarah Garcia', email:'Susan.Williams@test.com', aggrements: [ \"Be shown targeted ads\",\"Contribute to anonymous visit statistics\" ] },\r\n    ];\r\n    \r\n    constructor(private injector: Injector) {}\r\n\r\n    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {\r\n        if(request.url == '/consents' && request.method == 'GET') {\r\n            let data = {\r\n                consents: this.consents.map( (item) => {\r\n                        return item;\r\n                    }),\r\n                    totalRecords: this.consents.length\r\n                };\r\n            let response = { status: 200, body: data }\r\n            return of(new HttpResponse(response));\r\n        }\r\n        if(request.url == '/consents' && request.method == 'POST') {\r\n            this.consents = [...this.consents, request.body] ;\r\n            let response = { status: 200, body: request.body }\r\n            return of(new HttpResponse(response));\r\n        }\r\n        return next.handle(request);\r\n    }\r\n}\r\n\r\n",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "injector",
+                        "type": "Injector",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 26,
+                "jsdoctags": [
+                    {
+                        "name": "injector",
+                        "type": "Injector",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "type": "interceptor"
+        }
+    ],
+    "classes": [
+        {
+            "name": "ConsentsDTO",
+            "id": "class-ConsentsDTO-110612a0499fd5442ab961e35337fa573db7d259d67460bed44322a4dd087d794110e7605f184c95da234fe474679bcfa0b53eb10733cb7ddcc0a4ed5a9cea58",
+            "file": "src/app/DTO/ConsentsDTO.ts",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "type": "class",
+            "sourceCode": "export class ConsentsDTO {\r\n    name: string;\r\n    email: string;\r\n    aggrements: string[];\r\n\r\n    constructor(_name: string, _email: string, _aggrements:string[]) {\r\n        this.name = _name,\r\n        this.email = _email,\r\n        this.aggrements = _aggrements\r\n    }\r\n}",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "_name",
+                        "type": "string",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "_email",
+                        "type": "string",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "_aggrements",
+                        "type": "string[]",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 5,
+                "jsdoctags": [
+                    {
+                        "name": "_name",
+                        "type": "string",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "_email",
+                        "type": "string",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "_aggrements",
+                        "type": "string[]",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "properties": [
+                {
+                    "name": "aggrements",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 5
+                },
+                {
+                    "name": "email",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 4
+                },
+                {
+                    "name": "name",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 3
+                }
+            ],
+            "methods": [],
+            "indexSignatures": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "hostBindings": [],
+            "hostListeners": []
+        }
+    ],
+    "directives": [],
+    "components": [
+        {
+            "name": "AppComponent",
+            "id": "component-AppComponent-7ef8e7f428477ba9ca2b218d4d7b42b48cd9b5c5b5d1e3c3cbd3bbece01fb53eb281b8821ed0a0310165a2441d69c6baeb82446ada967d867d716ab9ac1d5e72",
+            "file": "src/app/app.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-root",
+            "styleUrls": [
+                "./app.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./app.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "title",
+                    "defaultValue": "'Consent Management System'",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string",
+                    "optional": false,
+                    "description": "",
+                    "line": 9
+                }
+            ],
+            "methodsClass": [],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  templateUrl: './app.component.html',\n  styleUrls: ['./app.component.scss']\n})\nexport class AppComponent {\n  title = 'Consent Management System';\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "\r\n.main-app {\r\n    display: flex;\r\n    .container {\r\n        padding: 0.8rem;\r\n    }\r\n}",
+                    "styleUrl": "./app.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "templateData": "<div class=\"main-app\">\n    <app-side-nav></app-side-nav>\n    <div class=\"container\">\n        <div class=\"row\">\n            <div class=\"col-12\">\n                <router-outlet></router-outlet>\n            </div>            \n        </div>        \n    </div>        \n</div>"
+        },
+        {
+            "name": "ButtonComponent",
+            "id": "component-ButtonComponent-2a6a2ad50c8d532658dc1910931d6e5499322dbd9f16f3b5c9352213be9e6f3eb472cc9335c465899ff977888044a6f60c6c6e2653ff9042e9653989c161c876",
+            "file": "src/app/core/controls/button/button.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-button",
+            "styleUrls": [
+                "./button.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./button.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "caption",
+                    "defaultValue": "''",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 11,
+                    "type": "string",
+                    "decorators": []
+                },
+                {
+                    "name": "enableButton",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 13,
+                    "type": "boolean",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "onClick",
+                    "defaultValue": "new EventEmitter<any>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 12,
+                    "type": "EventEmitter"
+                }
+            ],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "click",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 20,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 17,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';\n\n// button component\n@Component({\n  selector: 'app-button',\n  templateUrl: './button.component.html',\n  styleUrls: ['./button.component.scss']\n})\nexport class ButtonComponent implements OnInit {\n\n  @Input() caption: string = '';\n  @Output() onClick = new EventEmitter<any>();\n  @Input() enableButton: boolean = false;\n  \n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n  click() {\n    this.onClick.emit();\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@import '../../../../scss/variable';\r\n\r\n.app-button {\r\n    .button {\r\n        background-color: $primary-color;\r\n        border-radius: 5px;\r\n        color: white;\r\n        border:1px solid black;\r\n        font-size: $font-size-18;\r\n        font-weight: bold;\r\n    }\r\n}",
+                    "styleUrl": "./button.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 13
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"app-button\">\n    <button type=\"button\" class=\"button\" (click)=\"click()\" [disabled]=\"!enableButton\" >{{caption}}</button>\n</div>"
+        },
+        {
+            "name": "GiveConsentComponent",
+            "id": "component-GiveConsentComponent-24082000a40ec84e59e59c876ade73aced1e7ef8e582caf88356b8628cb6f806d4cc0462135e03e08b90f078086f7a6f485dada47f23871532c029ceae812a64",
+            "file": "src/app/consents/give-consent/give-consent.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-give-consent",
+            "styleUrls": [
+                "./give-consent.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./give-consent.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "enableButton",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 20,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "submitForm",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "FormGroup",
+                    "optional": false,
+                    "description": "",
+                    "line": 19,
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "isEmailValid",
+                    "args": [
+                        {
+                            "name": "field",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 60,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "field",
+                            "type": "",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "isRequireField",
+                    "args": [
+                        {
+                            "name": "field",
+                            "type": "\"name\" | \"email\"",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "any",
+                    "typeParameters": [],
+                    "line": 53,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "field",
+                            "type": "\"name\" | \"email\"",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 37,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onAggrement",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 42,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "submitConsent",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 67,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnChanges, OnInit } from '@angular/core';\nimport { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';\nimport { Title } from '@angular/platform-browser';\nimport { Router } from '@angular/router';\nimport { Store } from '@ngrx/store';\nimport { ConsentsDTO } from 'src/app/DTO/ConsentsDTO';\nimport { ConsentsEnum } from 'src/app/enums/consents.enum';\nimport { AddConsents } from 'src/app/store/actions/consents.action';\nimport { State } from 'src/app/store/redecuers';\n\n// give consent component\n@Component({\n  selector: 'app-give-consent',\n  templateUrl: './give-consent.component.html',\n  styleUrls: ['./give-consent.component.scss']\n})\nexport class GiveConsentComponent implements OnInit{\n\n  public submitForm: FormGroup;\n  public enableButton: boolean = false;\n\n  constructor(\n    private fb: FormBuilder, \n    private store: Store<State>,\n    private router: Router,\n    private titleService: Title) {\n    \n    this.submitForm = this.fb.group({\n      name: new FormControl(null, [Validators.required]),\n      email: new FormControl(null, [Validators.required,Validators.email]),\n      aggrement1: new FormControl(null),\n      aggrement2: new FormControl(null),\n      aggrement3: new FormControl(null)\n    });\n   }\n\n  ngOnInit(): void {\n    this.titleService.setTitle(\"Give consent\");\n  }\n\n  // enable button \n  onAggrement() {\n    if(this.submitForm.get('aggrement1')?.value === true \n      ||  this.submitForm.get('aggrement2')?.value === true\n      ||  this.submitForm.get('aggrement3')?.value === true) {\n        this.enableButton = true;\n      } else {\n        this.enableButton = false;\n      }\n  }\n\n  // check fields\n  isRequireField(field: 'name' | 'email') {\n    let control = this.submitForm.get(field);\n\n    return control?.hasError(\"required\") && control?.markAsTouched({ onlySelf: true});\n  }\n\n  // validate email\n  isEmailValid(field: 'email') {\n    let control = this.submitForm.get(field);\n\n    return control?.hasError(\"email\") && control?.markAsTouched({ onlySelf: true});\n  }\n\n  // submit event\n  submitConsent()  {\n\n    if(this.submitForm.valid) {\n      // build consents dto\n      let consentsDTO:ConsentsDTO = {\n        name: this.submitForm.get('name')?.value,\n        email:this.submitForm.get('email')?.value,\n        aggrements: [\n          this.submitForm.get('aggrement1') && this.submitForm.get('aggrement1')?.value ?\n             ConsentsEnum.AGGREMENT1 : '',\n          this.submitForm.get('aggrement2') && this.submitForm.get('aggrement2')?.value ?\n            ConsentsEnum.AGGREMENT2 : '',\n          this.submitForm.get('aggrement3') && this.submitForm.get('aggrement3')?.value ?\n            ConsentsEnum.AGGREMENT3 : ''          \n        ]\n      }; \n\n      // add consents\n      this.store.dispatch(AddConsents({ payload: consentsDTO}));\n\n      // redirect to list page\n      this.router.navigate(['/consents']);\n\n    } else {\n      // validate controls\n      Object.keys(this.submitForm.controls).forEach(field => { \n        const control = this.submitForm.get(field);            \n        control?.markAsTouched({ onlySelf: true });    \n      });\n    }\n\n  }\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": ".give-consent {\r\n    text-align: center;\r\n    .form-container {\r\n        width: 80%;\r\n        display: flex;\r\n        justify-content: center;\r\n        .form-table {\r\n            width: inherit;\r\n        }\r\n        .submit-form-field {\r\n            width: 100%;\r\n        }\r\n\r\n        .consent-agreement {\r\n            border: 1px solid black;\r\n            text-align: left;\r\n            padding-left: 0.3rem;\r\n        }\r\n    }\r\n}",
+                    "styleUrl": "./give-consent.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store<State>",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "titleService",
+                        "type": "Title",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 20,
+                "jsdoctags": [
+                    {
+                        "name": "fb",
+                        "type": "FormBuilder",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "store",
+                        "type": "Store<State>",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "router",
+                        "type": "Router",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "titleService",
+                        "type": "Title",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"give-consent\">\n    <div class=\"row\">\n        <div class=\"col-12\">\n            <form [formGroup]=\"submitForm\">      \n                <div class=\"form-container\">     \n                    <table class=\"form-table\" cellspacing=\"0\">\n                        <tr>\n                            <td>\n                                <mat-form-field class=\"submit-form-field\">\n                                    <input matInput  type=\"text\" formControlName=\"name\" placeholder=\"Name\" />\n                                    <mat-error *ngIf=\"isRequireField('name')\">\n                                        Name is required.\n                                    </mat-error>\n                                </mat-form-field>\n                            </td>\n                            <td>\n                                <mat-form-field class=\"submit-form-field\">\n                                    <input matInput type=\"text\" formControlName=\"email\" placeholder=\"Email\" />\n                                    <mat-error *ngIf=\"isEmailValid('email') && !isRequireField('email') \">\n                                        Please enter a valid email address\n                                    </mat-error>\n                                    <mat-error *ngIf=\"isRequireField('email')\">\n                                        Email is required.\n                                    </mat-error>\n                                </mat-form-field>   \n                            </td>\n                        </tr>\n                        <tr>\n                            <td colspan=\"2\">\n                            I agree to:\n                            </td>\n                        </tr>\n                        <tr>\n                            <td colspan=\"2\">\n                            <div class=\"consent-agreement\">\n                                <div>\n                                    <mat-checkbox  formControlName=\"aggrement1\" (change)=\"onAggrement()\" > \n                                        Receive newsletter\n                                    </mat-checkbox>\n                                </div>\n                                <div>\n                                    <mat-checkbox  formControlName=\"aggrement2\" (change)=\"onAggrement()\"> \n                                        Be shown targeted ads\n                                    </mat-checkbox>\n                                </div>\n                                <div>\n                                    <mat-checkbox formControlName=\"aggrement3\" (change)=\"onAggrement()\" >\n                                        Contribute to anonymous visit statistics\n                                    </mat-checkbox>\n                                </div>\n                            </div>\n                \n                            </td>\n                        </tr>\n                        <tr>\n                            <td colspan=\"2\">\n                            <app-button caption=\"Give consent\" (onClick)=\"submitConsent()\" [enableButton]=\"enableButton\" ></app-button>\n                            </td>\n                        </tr>\n                    </table>    \n                </div> \n            </form>\n      </div>\n    </div>    \n</div>"
+        },
+        {
+            "name": "ListConsentsComponent",
+            "id": "component-ListConsentsComponent-7f1648fc1f1a827fed0a26ddb6f2505cb875736b2281228a6c43b499a06e04a2af83f5b0e768d2b5609a8290522bb496059a87cfddba25abe75f352e8a997990",
+            "file": "src/app/consents/list-consents/list-consents.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-list-consents",
+            "styleUrls": [
+                "./list-consents.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./list-consents.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [
+                {
+                    "name": "consents$",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "Observable<ConsentsDTO[]> | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 21,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "consentsData",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "any | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 23,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "consentsPaginateData",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "any | null",
+                    "optional": false,
+                    "description": "",
+                    "line": 24,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "consentsSub",
+                    "defaultValue": "null",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "any",
+                    "optional": false,
+                    "description": "",
+                    "line": 22,
+                    "modifierKind": [
+                        121
+                    ]
+                },
+                {
+                    "name": "currentPage",
+                    "defaultValue": "1",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 27,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "pageSize",
+                    "defaultValue": "2",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 28,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "tableColumns",
+                    "defaultValue": "['name', 'email', 'aggrements']",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "string[]",
+                    "optional": false,
+                    "description": "",
+                    "line": 30,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "totalRecords",
+                    "defaultValue": "0",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 26,
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "ngOnDestroy",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 50,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 35,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onNextPage",
+                    "args": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 68,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "onPageChange",
+                    "args": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 56,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "onPaginate",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 74,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onPrevPage",
+                    "args": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 62,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';\nimport { MatTableDataSource } from '@angular/material/table';\nimport { Title } from '@angular/platform-browser';\nimport { select, Store } from '@ngrx/store';\nimport { slice } from 'lodash';\nimport { Observable } from 'rxjs';\nimport { ConsentsDTO } from 'src/app/DTO/ConsentsDTO';\nimport { GetConsents } from 'src/app/store/actions';\nimport { State } from 'src/app/store/redecuers';\nimport { getConsents } from 'src/app/store/selectors';\n\n// list consent component\n@Component({\n  selector: 'app-list-consents',\n  templateUrl: './list-consents.component.html',\n  styleUrls: ['./list-consents.component.scss']\n})\n\nexport class ListConsentsComponent implements OnInit, OnDestroy{\n\n  public consents$: Observable<ConsentsDTO[]> | null = null\n  private consentsSub: any = null;\n  public consentsData: any | null;\n  public consentsPaginateData: any | null;\n   \n  public totalRecords: number = 0;\n  public currentPage: number = 1;\n  public pageSize: number = 2;\n  // columns\n  public tableColumns: string[] = ['name', 'email', 'aggrements'];\n\n  constructor(private store: Store<State>, private titleService: Title) {\n  }\n\n  ngOnInit(): void {\n    this.titleService.setTitle(\"Consents\");\n    this.store.dispatch(GetConsents());\n\n    this.consents$ = this.store.pipe(select(getConsents));\n    this.consentsSub = this.consents$.subscribe((items: any) => {\n      if(items && items.consents && items.consents.length > 0) {\n        this.consentsData = items.consents; \n        this.totalRecords = items && items.consents ? items.consents.length : 0;\n        this.onPaginate();\n      }\n    }); \n  }\n\n\n  ngOnDestroy() {\n    if(this.consentsSub) {\n      this.consentsSub.unsubscribe();\n    }\n  }\n  // page change event\n  onPageChange(page: any) {\n    this.currentPage = page; \n    this.onPaginate();   \n  }\n\n  // previous page event\n  onPrevPage(page: any) {\n    this.currentPage = page;\n    this.onPaginate();\n  }\n\n  // next page event\n  onNextPage(page: any) {\n    this.currentPage = page;\n    this.onPaginate();\n  }\n\n  // set pagination \n  onPaginate()  {\n    let result: ConsentsDTO[][] = slice(this.consentsData, (this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);\n    this.consentsPaginateData = new MatTableDataSource<ConsentsDTO[]>(result);\n  }\n}",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@import '../../../scss/variable';\r\n\r\n.list-consents {\r\n\r\n    .mat-table {\r\n        border: 1px solid black;\r\n        .mat-header-row {\r\n            justify-content: center;\r\n            .mat-header-cell {\r\n                border: 1px solid black;\r\n                color: black;\r\n                font-size: 15px;\r\n                &.mat-column-name {\r\n                    justify-content: center;\r\n                    padding-left: 0.2rem;\r\n                } \r\n                &.mat-column-email {\r\n                    justify-content: center;\r\n                    padding-left: 0.2rem;\r\n                } \r\n                &.mat-column-aggrements {\r\n                    padding-left: 0.2rem;\r\n                }\r\n            }\r\n            \r\n        }\r\n        .mat-row {\r\n            .mat-cell {\r\n                border: 1px solid black;\r\n                &.mat-column-name {\r\n                    padding-left: 0.2rem;                    \r\n                } \r\n                &.mat-column-email {\r\n                    padding-left: 0.2rem;\r\n                } \r\n                &.mat-column-aggrements {\r\n                    padding-left: 0.2rem;\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+                    "styleUrl": "./list-consents.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [
+                    {
+                        "name": "store",
+                        "type": "Store<State>",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    },
+                    {
+                        "name": "titleService",
+                        "type": "Title",
+                        "deprecated": false,
+                        "deprecationMessage": ""
+                    }
+                ],
+                "line": 30,
+                "jsdoctags": [
+                    {
+                        "name": "store",
+                        "type": "Store<State>",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    },
+                    {
+                        "name": "titleService",
+                        "type": "Title",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "tagName": {
+                            "text": "param"
+                        }
+                    }
+                ]
+            },
+            "implements": [
+                "OnInit",
+                "OnDestroy"
+            ],
+            "templateData": "<div class=\"list-consents\">\r\n    <mat-table [dataSource]=\"consentsPaginateData\">\r\n\r\n        <ng-container matColumnDef=\"name\">\r\n            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>\r\n            <mat-cell *matCellDef=\"let element\"> {{element.name}} </mat-cell>\r\n        </ng-container> \r\n\r\n        <ng-container matColumnDef=\"email\">\r\n            <mat-header-cell *matHeaderCellDef> Email </mat-header-cell>\r\n            <mat-cell *matCellDef=\"let element\"> {{element.email}} </mat-cell>\r\n        </ng-container>\r\n    \r\n        <ng-container matColumnDef=\"aggrements\">\r\n            <mat-header-cell *matHeaderCellDef> Consents given for </mat-header-cell>\r\n            <mat-cell *matCellDef=\"let element\"> {{element.aggrements}} </mat-cell>\r\n        </ng-container>\r\n    \r\n\r\n        <mat-header-row *matHeaderRowDef=\"tableColumns\"></mat-header-row>\r\n        <mat-row *matRowDef=\"let row; columns: tableColumns;\"></mat-row>\r\n    </mat-table>\r\n    <app-pagination (changePerPage)=\"onPageChange($event)\" (prevPage)=\"onPrevPage($event)\"\r\n        (nextPage)=\"onNextPage($event)\" [totalRecords]=\"totalRecords\" [pageSize]=\"pageSize\"></app-pagination>\r\n\r\n</div>"
+        },
+        {
+            "name": "PaginationComponent",
+            "id": "component-PaginationComponent-483399971759740eb66af281340db271f36c8f71f0310460b51633d86725bc9b84594d626de5c47d0ae04d74e56477ebf30cfed62639a61183123e8539e435ed",
+            "file": "src/app/core/components/pagination/pagination.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-pagination",
+            "styleUrls": [
+                "./pagination.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./pagination.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [
+                {
+                    "name": "pageSize",
+                    "defaultValue": "2",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 17,
+                    "type": "number",
+                    "decorators": []
+                },
+                {
+                    "name": "totalRecords",
+                    "defaultValue": "0",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 16,
+                    "type": "number",
+                    "decorators": []
+                }
+            ],
+            "outputsClass": [
+                {
+                    "name": "changePerPage",
+                    "defaultValue": "new EventEmitter<any>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 19,
+                    "type": "EventEmitter<any>"
+                },
+                {
+                    "name": "nextPage",
+                    "defaultValue": "new EventEmitter<any>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 20,
+                    "type": "EventEmitter<any>"
+                },
+                {
+                    "name": "prevPage",
+                    "defaultValue": "new EventEmitter<any>()",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "line": 21,
+                    "type": "EventEmitter<any>"
+                }
+            ],
+            "propertiesClass": [
+                {
+                    "name": "currentPage",
+                    "defaultValue": "1",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 11,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "disableNext",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 13,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "disablePrev",
+                    "defaultValue": "false",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "boolean",
+                    "optional": false,
+                    "description": "",
+                    "line": 14,
+                    "modifierKind": [
+                        123
+                    ]
+                },
+                {
+                    "name": "totalPages",
+                    "defaultValue": "0",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "number",
+                    "optional": false,
+                    "description": "",
+                    "line": 12,
+                    "modifierKind": [
+                        123
+                    ]
+                }
+            ],
+            "methodsClass": [
+                {
+                    "name": "disablePrevNextButton",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 104,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "getTotalPages",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 34,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnChanges",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 29,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 25,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onChangePerPage",
+                    "args": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": ""
+                        }
+                    ],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 84,
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "jsdoctags": [
+                        {
+                            "name": "page",
+                            "type": "any",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "tagName": {
+                                "text": "param"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "onNext",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 97,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "onPrev",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 90,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                },
+                {
+                    "name": "pages",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "{}",
+                    "typeParameters": [],
+                    "line": 39,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';\n\n// pagination component\n@Component({\n  selector: 'app-pagination',\n  templateUrl: './pagination.component.html',\n  styleUrls: ['./pagination.component.scss']\n})\nexport class PaginationComponent implements OnInit {\n\n  public currentPage: number = 1;\n  public totalPages: number = 0;\n  public disableNext: boolean = false;\n  public disablePrev: boolean = false;\n  // input event\n  @Input() totalRecords: number  = 0;\n  @Input() pageSize: number = 2;\n  // output event\n  @Output() changePerPage: EventEmitter<any> = new EventEmitter<any>();\n  @Output() nextPage: EventEmitter<any> = new EventEmitter<any>();\n  @Output() prevPage: EventEmitter<any> = new EventEmitter<any>();\n\n  constructor() { }\n\n  ngOnInit(): void {\n    this.disablePrevNextButton();\n  }\n\n  ngOnChanges() {\n    this.getTotalPages();\n  }\n\n  // get total pages\n  getTotalPages() {\n    this.totalPages = this.totalRecords ? Math.ceil(this.totalRecords / this.pageSize) : 0;\n  }\n  \n  // get pages \n  pages() {\n    let pages: any[] = [];\n\n    if(this.totalPages == 0)\n      return [];\n\n    let pageCount = 0;    \n\n    if(this.currentPage === 1) {\n      pageCount = this.currentPage + 3;\n      pageCount = pageCount >= this.totalPages ? this.totalPages : pageCount;\n\n      for(let i = 1; i <= pageCount; i++) {\n        pages.push(i);\n      }\n    } else if (this.currentPage == 2) {\n      pageCount = this.currentPage + 2;\n      pageCount = pageCount >= this.totalPages ? this.totalPages : pageCount;\n\n      for(let i = 1; i <= pageCount; i++) {\n        pages.push(i);\n      }\n    } else if(this.currentPage == this.totalPages) {\n      pageCount = this.totalPages;\n      let firstPage = this.currentPage > 3 ? this.currentPage - 3 : 1 ; \n      \n      for(let i = firstPage; i <= pageCount; i++) {\n        pages.push(i);\n      }\n    } else if(this.currentPage < this.totalPages) {\n      \n      let prevPage = (this.currentPage - 2) == 0 ? 1 : this.currentPage - 2 ; \n      for(let i = prevPage; i < this.currentPage; i++) {\n        pages.push(i);\n      }      \n    \n      let nextPage = (this.currentPage + 1) >= this.totalPages ? this.totalPages :  this.currentPage + 1;\n      for(let i = this.currentPage; i <= nextPage; i++) {\n        pages.push(i);\n      }\n\n    }\n    return pages;\n  }\n  // change page\n  onChangePerPage(page: any){\n    this.currentPage = page;\n    this.disablePrevNextButton();      \n    this.changePerPage.emit(page);\n  }\n  // set previous page\n  onPrev() {\n    this.currentPage = this.currentPage - 1;\n    this.disablePrevNextButton();\n    this.prevPage.emit(this.currentPage);\n  }\n\n  // set next page\n  onNext() {\n    this.currentPage = this.currentPage + 1;\n    this.disablePrevNextButton();\n    this.nextPage.emit(this.currentPage);\n  }\n\n  // disable prev/next button  \n  disablePrevNextButton() {\n    this.disablePrev = this.currentPage === 1 ? true : false ;\n    this.disableNext = this.totalPages === this.currentPage ? true : false;    \n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@import '../../../../scss/variable';\r\n\r\n.pagination {\r\n    border: 1px solid black;\r\n    border-radius: 0;\r\n    align-items: center;\r\n    .page-number{\r\n        .page {\r\n            cursor: pointer;\r\n            color: rgb(64, 159, 190);            \r\n            text-decoration: underline;\r\n        }\r\n        .selected {\r\n            color: blue;\r\n            text-decoration: underline;\r\n        }\r\n    }\r\n    .pagination-button {\r\n        color: blue;\r\n        &.mat-button-disabled {\r\n            color: lightblue;\r\n        }\r\n    }\r\n}",
+                    "styleUrl": "./pagination.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 21
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"d-flex justify-content-between pagination\" *ngIf=\"totalPages != 0\"  >  \n    <div class=\"prev p2\">\n        <button mat-button (click)=\"onPrev()\" class=\"pagination-button\" [disabled]=\"disablePrev\"><< Previous page</button>\n    </div>\n    <div class=\"p-2\"> \n        <div class=\"page-number\">\n            <span *ngFor=\"let page of pages()\" class=\"page\" \n                [ngClass]=\"currentPage==page? 'selected' : ''\" (click)=\"onChangePerPage(page)\"> \n                {{page}}\n            </span>\n        </div>\n    </div>\n    <div class=\"next p-2\">\n        <button mat-button (click)=\"onNext()\" class=\"pagination-button\" [disabled]=\"disableNext\"> Next page >></button>\n    </div>\n</div>"
+        },
+        {
+            "name": "SideNavComponent",
+            "id": "component-SideNavComponent-805ae38b7c33766cd616fc8dd2d7c3ce8139987e40e5108248234867bf3c7050523deebb1be4f975406e22defc52c833e90a8d52e37da00ca9cb69be6dcaa665",
+            "file": "src/app/core/components/side-nav/side-nav.component.ts",
+            "encapsulation": [],
+            "entryComponents": [],
+            "inputs": [],
+            "outputs": [],
+            "providers": [],
+            "selector": "app-side-nav",
+            "styleUrls": [
+                "./side-nav.component.scss"
+            ],
+            "styles": [],
+            "templateUrl": [
+                "./side-nav.component.html"
+            ],
+            "viewProviders": [],
+            "inputsClass": [],
+            "outputsClass": [],
+            "propertiesClass": [],
+            "methodsClass": [
+                {
+                    "name": "ngOnInit",
+                    "args": [],
+                    "optional": false,
+                    "returnType": "void",
+                    "typeParameters": [],
+                    "line": 13,
+                    "deprecated": false,
+                    "deprecationMessage": ""
+                }
+            ],
+            "deprecated": false,
+            "deprecationMessage": "",
+            "hostBindings": [],
+            "hostListeners": [],
+            "description": "",
+            "rawdescription": "\n",
+            "type": "component",
+            "sourceCode": "import { Component, OnInit } from '@angular/core';\n\n// left side navigation component\n@Component({\n  selector: 'app-side-nav',\n  templateUrl: './side-nav.component.html',\n  styleUrls: ['./side-nav.component.scss']\n})\nexport class SideNavComponent implements OnInit {\n\n  constructor() { }\n\n  ngOnInit(): void {\n  }\n\n}\n",
+            "assetsDirs": [],
+            "styleUrlsData": [
+                {
+                    "data": "@import '../../../../scss/variable';\r\n\r\n.side-nav {\r\n    top:0;\r\n    height: 80vh;\r\n    background-color: rgb(228, 239, 248); // rgb(189, 184, 184);\r\n    padding: 0;\r\n    margin: 0;\r\n    ul {\r\n        list-style-type: none;\r\n        padding: 0;      \r\n        text-align: center;  \r\n        li {\r\n            font-size: $font-size-20;\r\n            border: 1px solid black;     \r\n            cursor: pointer;       \r\n            border-radius: 5px;\r\n            padding: 0.2rem;\r\n        }\r\n        .active-link {\r\n            background-color: $light-blue;\r\n            font-weight: 500;   \r\n        }\r\n    }\r\n}",
+                    "styleUrl": "./side-nav.component.scss"
+                }
+            ],
+            "stylesData": "",
+            "constructorObj": {
+                "name": "constructor",
+                "description": "",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "args": [],
+                "line": 9
+            },
+            "implements": [
+                "OnInit"
+            ],
+            "templateData": "<div class=\"side-nav\">\n    <ul class=\"pt-1\">\n        <li class=\"mt-2\" routerLinkActive=\"active-link\" routerLink=\"give-consent\">\n            Give consent                                        \n        </li>\n        <li class=\"mt-2\" routerLinkActive=\"active-link\" routerLink=\"consents\">\n            Collected consents\n        </li>        \n    </ul>\n</div>"
+        }
+    ],
+    "modules": [
+        {
+            "name": "AppModule",
+            "id": "module-AppModule-a2cd61d9fdeb0b210bc2df6ad32c90f874d6b1bf861da4be1f8be79c46d340aa20b6c73e93852f58ce6e806ae0e6c926fb814068b8b996c4d488cc813ec255c5",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/app.module.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from '@angular/core';\nimport { BrowserModule, Title } from '@angular/platform-browser';\nimport { AppRoutingModule } from './app-routing.module';\nimport { AppComponent } from './app.component';\nimport { ConsentsModule } from './consents/consents.modules';\nimport { NgbModule } from '@ng-bootstrap/ng-bootstrap';\nimport { CoreModule } from './core/core.modules';\nimport { HttpClientModule } from '@angular/common/http'\nimport { metaReducers, reducers } from './store/redecuers';\nimport { StoreModule } from '@ngrx/store';\nimport { environment } from 'src/environments/environment';\nimport { StoreDevtoolsModule } from '@ngrx/store-devtools';\nimport { ConsentsService } from './services/consents.service';\nimport { EffectsModule } from '@ngrx/effects';\nimport { effects } from './store/effects';\nimport { BrowserAnimationsModule } from '@angular/platform-browser/animations';\nimport { httpInterceptorProviders } from './http-interceptors';\n\n@NgModule({\n  declarations: [\n    AppComponent\n  ],\n  imports: [    \n    BrowserModule,\n    AppRoutingModule,\n    NgbModule,\n    HttpClientModule,\n    StoreModule.forRoot(reducers, { metaReducers }),\n    EffectsModule.forRoot(effects),\n    !environment.production ? StoreDevtoolsModule.instrument() : [],\n    CoreModule,\n    ConsentsModule,\n    BrowserAnimationsModule\n  ],\n  providers: [\n    Title,\n    ConsentsService, \n    httpInterceptorProviders       \n  ],\n  bootstrap: [AppComponent],\n})\nexport class AppModule { }\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": [
+                        {
+                            "name": "ConsentsService"
+                        }
+                    ]
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "!environment"
+                        },
+                        {
+                            "name": "AppRoutingModule"
+                        },
+                        {
+                            "name": "ConsentsModule"
+                        },
+                        {
+                            "name": "CoreModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": [
+                        {
+                            "name": "AppComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "AppRoutingModule",
+            "id": "module-AppRoutingModule-2d2cd2000ebb89bd8bedc4f4497953d94fe00ae9461285356d17ecdb220728ee4c5bc6645b999be10b7447bfafcda1c9faa400cf4d929ec11e79d8fca21de3e2",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/app-routing.module.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from '@angular/core';\nimport { RouterModule, Routes } from '@angular/router';\n\nconst routes: Routes = [\n  {\n    path:'',\n    loadChildren: () => \"import('./consents/consents.modules').then(m => m.ConsentsModule)\" \n  }\n];\n\n@NgModule({\n  imports: [RouterModule.forRoot(routes)],\n  exports: [RouterModule]\n})\nexport class AppRoutingModule { }\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": []
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "ConsentsModule",
+            "id": "module-ConsentsModule-51a049e690bef7d1f3f950cf5f94ea09aa909e1337e7d86e51acdfc2ac287f5ddb3dff6f579205251ced84f90b0e65a45811985a27d403ca1a675d2639b94a65",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/consents/consents.modules.ts",
+            "methods": [],
+            "sourceCode": "import { NgModule } from \"@angular/core\";\r\nimport { FormsModule, ReactiveFormsModule } from \"@angular/forms\";\r\nimport { CoreModule } from \"../core/core.modules\";\r\nimport { ConsentsRoutingModule } from \"./consents-routing.module\";\r\nimport { GiveConsentComponent } from \"./give-consent/give-consent.component\";\r\nimport { ListConsentsComponent } from \"./list-consents/list-consents.component\";\r\nimport { MatTableModule } from '@angular/material/table';\r\nimport { MatPaginatorModule } from \"@angular/material/paginator\";\r\nimport { CommonModule } from \"@angular/common\";\r\nimport { MatCheckboxModule } from '@angular/material/checkbox';\r\nimport { MatInputModule } from '@angular/material/input'\r\n\r\n// consent modules\r\n@NgModule({\r\n   declarations: [\r\n       ListConsentsComponent,\r\n       GiveConsentComponent\r\n   ],\r\n   imports:[\r\n    CommonModule,\r\n    ConsentsRoutingModule,\r\n    CoreModule,\r\n    FormsModule,\r\n    ReactiveFormsModule,\r\n    MatTableModule,\r\n    MatPaginatorModule,\r\n    MatCheckboxModule,\r\n    MatInputModule\r\n   ]\r\n})\r\n\r\nexport class ConsentsModule { }\r\n",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "GiveConsentComponent"
+                        },
+                        {
+                            "name": "ListConsentsComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": [
+                        {
+                            "name": "CoreModule"
+                        }
+                    ]
+                },
+                {
+                    "type": "exports",
+                    "elements": []
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        },
+        {
+            "name": "CoreModule",
+            "id": "module-CoreModule-339a63db4f8404e700fab92cbe5eca16e5935107497e24e1b192e969c1a4ce40657798a797b9c3a14f47c4575c78f38d116708b2ce878302173e35b198ac4b6a",
+            "description": "",
+            "deprecationMessage": "",
+            "deprecated": false,
+            "file": "src/app/core/core.modules.ts",
+            "methods": [],
+            "sourceCode": "import { CommonModule } from \"@angular/common\";\r\nimport { NgModule } from \"@angular/core\";\r\nimport { FormsModule } from \"@angular/forms\";\r\nimport { MatButtonModule } from \"@angular/material/button\";\r\nimport { RouterModule } from \"@angular/router\";\r\nimport { PaginationComponent } from \"./components/pagination/pagination.component\";\r\nimport { SideNavComponent } from \"./components/side-nav/side-nav.component\";\r\nimport { ButtonComponent } from \"./controls/button/button.component\";\r\n\r\n// core module\r\n@NgModule({\r\n    declarations: [\r\n        SideNavComponent,\r\n        ButtonComponent,\r\n        PaginationComponent\r\n    ],\r\n    imports:[\r\n        FormsModule,\r\n        RouterModule,\r\n        CommonModule,\r\n        MatButtonModule\r\n    ],\r\n    exports: [\r\n        SideNavComponent,\r\n        ButtonComponent,\r\n        PaginationComponent\r\n    ]\r\n})\r\n\r\nexport class CoreModule {}",
+            "children": [
+                {
+                    "type": "providers",
+                    "elements": []
+                },
+                {
+                    "type": "declarations",
+                    "elements": [
+                        {
+                            "name": "ButtonComponent"
+                        },
+                        {
+                            "name": "PaginationComponent"
+                        },
+                        {
+                            "name": "SideNavComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "imports",
+                    "elements": []
+                },
+                {
+                    "type": "exports",
+                    "elements": [
+                        {
+                            "name": "ButtonComponent"
+                        },
+                        {
+                            "name": "PaginationComponent"
+                        },
+                        {
+                            "name": "SideNavComponent"
+                        }
+                    ]
+                },
+                {
+                    "type": "bootstrap",
+                    "elements": []
+                },
+                {
+                    "type": "classes",
+                    "elements": []
+                }
+            ]
+        }
+    ],
+    "miscellaneous": {
+        "variables": [
+            {
+                "name": "AddConsents",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/actions/consents.action.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction(\r\n    ConsentActionTypes.ADD_CONSENTS,\r\n    props<{ payload: ConsentsDTO}>()\r\n)"
+            },
+            {
+                "name": "AddConsentsFail",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/actions/consents.action.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction(\r\n    ConsentActionTypes.ADD_CONSENTS_FAIL,\r\n    props<{ payload: any}>()\r\n)"
+            },
+            {
+                "name": "AddConsentsSuccess",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/actions/consents.action.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction(\r\n    ConsentActionTypes.ADD_CONSENTS_SUCCESS,\r\n    props<{ payload: ConsentsDTO}>()\r\n)"
+            },
+            {
+                "name": "consentsList",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/selectors/consents.selector.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createFeatureSelector<ConsentsState>(\"consentsReducer\")"
+            },
+            {
+                "name": "consentsReducer",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/redecuers/consents.reducer.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createReducer(\r\n    initialState,\r\n    on(AddConsents, state => ({...state, loading: true}) ),\r\n    on(AddConsentsSuccess, state => ({...state, loading: false})),\r\n    on(AddConsentsFail, state => ({...state, loading: false })),\r\n    \r\n    on(GetConsents, state => ({...state, loading: true })),\r\n    on(GetConsentsSuccesss, (state,{ payload }) => ({...state, consents: payload, loading: false })),\r\n    on(GetConsentsFail, state => ({...state, loading: false }))\r\n    \r\n)"
+            },
+            {
+                "name": "ConsentsRoutingModule",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/consents/consents-routing.module.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "RouterModule.forChild(routes)"
+            },
+            {
+                "name": "effects",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/effects/index.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "[]",
+                "defaultValue": "[\r\n    ConsentsEffects\r\n]"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.dev.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\r\n    production: false,\r\n    consentAPI: {\r\n      v1: '/v1/',    \r\n    }\r\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  production: false,\n  consentAPI: {\n    v1: '/v1/',    \n  }\n}"
+            },
+            {
+                "name": "environment",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/environments/environment.prod.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "object",
+                "defaultValue": "{\n  production: true,\n  consentAPI: {\n    v1: '/v1/',    \n  }\n}"
+            },
+            {
+                "name": "getConsents",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/selectors/consents.selector.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createSelector(consentsList, (state:ConsentsState) => state.consents)"
+            },
+            {
+                "name": "GetConsents",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/actions/consents.action.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction(\r\n    ConsentActionTypes.GET_CONSENTS\r\n)"
+            },
+            {
+                "name": "GetConsentsFail",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/actions/consents.action.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction(\r\n    ConsentActionTypes.GET_CONSENTS_FAIL,\r\n    props<{ payload: any }>()\r\n)"
+            },
+            {
+                "name": "GetConsentsSuccesss",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/actions/consents.action.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "",
+                "defaultValue": "createAction(\r\n    ConsentActionTypes.GET_CONSENTS_SUCCESS,\r\n    props<{ payload: ConsentsDTO[] }>()\r\n)"
+            },
+            {
+                "name": "httpInterceptorProviders",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/http-interceptors/index.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "[]",
+                "defaultValue": "[\r\n    { provide: HTTP_INTERCEPTORS, useClass: MockHttpInterceptor, multi: true },\r\n  ]"
+            },
+            {
+                "name": "initialState",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/redecuers/consents.reducer.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ConsentsState",
+                "defaultValue": "{\r\n    consents: [],\r\n    loading: false\r\n}"
+            },
+            {
+                "name": "metaReducers",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/redecuers/index.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "MetaReducer[]",
+                "defaultValue": "[]"
+            },
+            {
+                "name": "reducers",
+                "ctype": "miscellaneous",
+                "subtype": "variable",
+                "file": "src/app/store/redecuers/index.ts",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "type": "ActionReducerMap<State>",
+                "defaultValue": "{\r\n    consentsReducer: consentsReducer.consentsReducer\r\n}"
+            }
+        ],
+        "functions": [],
+        "typealiases": [],
+        "enumerations": [
+            {
+                "name": "ConsentActionTypes",
+                "childs": [
+                    {
+                        "name": "ADD_CONSENTS",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "[CMS] ADD_CONSENTS"
+                    },
+                    {
+                        "name": "ADD_CONSENTS_SUCCESS",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "[CMS] ADD_CONSENTS_SUCCESS"
+                    },
+                    {
+                        "name": "ADD_CONSENTS_FAIL",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "[CMS] ADD_CONSENTS_FAIL"
+                    },
+                    {
+                        "name": "GET_CONSENTS",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "[CMS] GET_CONSENTS"
+                    },
+                    {
+                        "name": "GET_CONSENTS_SUCCESS",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "[CMS] GET_CONSENTS_SUCCESS"
+                    },
+                    {
+                        "name": "GET_CONSENTS_FAIL",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "[CMS] GET_CONSENTS_FAIL"
+                    }
+                ],
+                "ctype": "miscellaneous",
+                "subtype": "enum",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "file": "src/app/store/actions/consents.action.ts"
+            },
+            {
+                "name": "ConsentsEnum",
+                "childs": [
+                    {
+                        "name": "AGGREMENT1",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Receive newsletter"
+                    },
+                    {
+                        "name": "AGGREMENT2",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Be shown targeted ads"
+                    },
+                    {
+                        "name": "AGGREMENT3",
+                        "deprecated": false,
+                        "deprecationMessage": "",
+                        "value": "Contribute to anonymous visit statistics"
+                    }
+                ],
+                "ctype": "miscellaneous",
+                "subtype": "enum",
+                "deprecated": false,
+                "deprecationMessage": "",
+                "description": "",
+                "file": "src/app/enums/consents.enum.ts"
+            }
+        ],
+        "groupedVariables": {
+            "src/app/store/actions/consents.action.ts": [
+                {
+                    "name": "AddConsents",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/actions/consents.action.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n    ConsentActionTypes.ADD_CONSENTS,\r\n    props<{ payload: ConsentsDTO}>()\r\n)"
+                },
+                {
+                    "name": "AddConsentsFail",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/actions/consents.action.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n    ConsentActionTypes.ADD_CONSENTS_FAIL,\r\n    props<{ payload: any}>()\r\n)"
+                },
+                {
+                    "name": "AddConsentsSuccess",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/actions/consents.action.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n    ConsentActionTypes.ADD_CONSENTS_SUCCESS,\r\n    props<{ payload: ConsentsDTO}>()\r\n)"
+                },
+                {
+                    "name": "GetConsents",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/actions/consents.action.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n    ConsentActionTypes.GET_CONSENTS\r\n)"
+                },
+                {
+                    "name": "GetConsentsFail",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/actions/consents.action.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n    ConsentActionTypes.GET_CONSENTS_FAIL,\r\n    props<{ payload: any }>()\r\n)"
+                },
+                {
+                    "name": "GetConsentsSuccesss",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/actions/consents.action.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createAction(\r\n    ConsentActionTypes.GET_CONSENTS_SUCCESS,\r\n    props<{ payload: ConsentsDTO[] }>()\r\n)"
+                }
+            ],
+            "src/app/store/selectors/consents.selector.ts": [
+                {
+                    "name": "consentsList",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/selectors/consents.selector.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createFeatureSelector<ConsentsState>(\"consentsReducer\")"
+                },
+                {
+                    "name": "getConsents",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/selectors/consents.selector.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createSelector(consentsList, (state:ConsentsState) => state.consents)"
+                }
+            ],
+            "src/app/store/redecuers/consents.reducer.ts": [
+                {
+                    "name": "consentsReducer",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/redecuers/consents.reducer.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "createReducer(\r\n    initialState,\r\n    on(AddConsents, state => ({...state, loading: true}) ),\r\n    on(AddConsentsSuccess, state => ({...state, loading: false})),\r\n    on(AddConsentsFail, state => ({...state, loading: false })),\r\n    \r\n    on(GetConsents, state => ({...state, loading: true })),\r\n    on(GetConsentsSuccesss, (state,{ payload }) => ({...state, consents: payload, loading: false })),\r\n    on(GetConsentsFail, state => ({...state, loading: false }))\r\n    \r\n)"
+                },
+                {
+                    "name": "initialState",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/redecuers/consents.reducer.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ConsentsState",
+                    "defaultValue": "{\r\n    consents: [],\r\n    loading: false\r\n}"
+                }
+            ],
+            "src/app/consents/consents-routing.module.ts": [
+                {
+                    "name": "ConsentsRoutingModule",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/consents/consents-routing.module.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "",
+                    "defaultValue": "RouterModule.forChild(routes)"
+                }
+            ],
+            "src/app/store/effects/index.ts": [
+                {
+                    "name": "effects",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/effects/index.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "defaultValue": "[\r\n    ConsentsEffects\r\n]"
+                }
+            ],
+            "src/environments/environment.dev.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.dev.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\r\n    production: false,\r\n    consentAPI: {\r\n      v1: '/v1/',    \r\n    }\r\n}"
+                }
+            ],
+            "src/environments/environment.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  production: false,\n  consentAPI: {\n    v1: '/v1/',    \n  }\n}"
+                }
+            ],
+            "src/environments/environment.prod.ts": [
+                {
+                    "name": "environment",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/environments/environment.prod.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "object",
+                    "defaultValue": "{\n  production: true,\n  consentAPI: {\n    v1: '/v1/',    \n  }\n}"
+                }
+            ],
+            "src/app/http-interceptors/index.ts": [
+                {
+                    "name": "httpInterceptorProviders",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/http-interceptors/index.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "[]",
+                    "defaultValue": "[\r\n    { provide: HTTP_INTERCEPTORS, useClass: MockHttpInterceptor, multi: true },\r\n  ]"
+                }
+            ],
+            "src/app/store/redecuers/index.ts": [
+                {
+                    "name": "metaReducers",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/redecuers/index.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "MetaReducer[]",
+                    "defaultValue": "[]"
+                },
+                {
+                    "name": "reducers",
+                    "ctype": "miscellaneous",
+                    "subtype": "variable",
+                    "file": "src/app/store/redecuers/index.ts",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "type": "ActionReducerMap<State>",
+                    "defaultValue": "{\r\n    consentsReducer: consentsReducer.consentsReducer\r\n}"
+                }
+            ]
+        },
+        "groupedFunctions": {},
+        "groupedEnumerations": {
+            "src/app/store/actions/consents.action.ts": [
+                {
+                    "name": "ConsentActionTypes",
+                    "childs": [
+                        {
+                            "name": "ADD_CONSENTS",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "[CMS] ADD_CONSENTS"
+                        },
+                        {
+                            "name": "ADD_CONSENTS_SUCCESS",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "[CMS] ADD_CONSENTS_SUCCESS"
+                        },
+                        {
+                            "name": "ADD_CONSENTS_FAIL",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "[CMS] ADD_CONSENTS_FAIL"
+                        },
+                        {
+                            "name": "GET_CONSENTS",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "[CMS] GET_CONSENTS"
+                        },
+                        {
+                            "name": "GET_CONSENTS_SUCCESS",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "[CMS] GET_CONSENTS_SUCCESS"
+                        },
+                        {
+                            "name": "GET_CONSENTS_FAIL",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "[CMS] GET_CONSENTS_FAIL"
+                        }
+                    ],
+                    "ctype": "miscellaneous",
+                    "subtype": "enum",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "file": "src/app/store/actions/consents.action.ts"
+                }
+            ],
+            "src/app/enums/consents.enum.ts": [
+                {
+                    "name": "ConsentsEnum",
+                    "childs": [
+                        {
+                            "name": "AGGREMENT1",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Receive newsletter"
+                        },
+                        {
+                            "name": "AGGREMENT2",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Be shown targeted ads"
+                        },
+                        {
+                            "name": "AGGREMENT3",
+                            "deprecated": false,
+                            "deprecationMessage": "",
+                            "value": "Contribute to anonymous visit statistics"
+                        }
+                    ],
+                    "ctype": "miscellaneous",
+                    "subtype": "enum",
+                    "deprecated": false,
+                    "deprecationMessage": "",
+                    "description": "",
+                    "file": "src/app/enums/consents.enum.ts"
+                }
+            ]
+        },
+        "groupedTypeAliases": {}
+    },
+    "routes": {
+        "name": "<root>",
+        "kind": "module",
+        "className": "AppModule",
+        "children": [
+            {
+                "name": "routes",
+                "filename": "src/app/app-routing.module.ts",
+                "module": "AppRoutingModule",
+                "children": [
+                    {
+                        "path": "",
+                        "loadChildren": "./consents/consents.modules#ConsentsModule"
+                    }
+                ],
+                "kind": "module"
+            }
+        ]
+    },
+    "coverage": {
+        "count": 0,
+        "status": "low",
+        "files": [
+            {
+                "filePath": "src/app/DTO/ConsentsDTO.ts",
+                "type": "class",
+                "linktype": "classe",
+                "name": "ConsentsDTO",
+                "coveragePercent": 0,
+                "coverageCount": "0/5",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/app.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "AppComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/consents/consents-routing.module.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "ConsentsRoutingModule",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/consents/give-consent/give-consent.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "GiveConsentComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/9",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/consents/list-consents/list-consents.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ListConsentsComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/16",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/components/pagination/pagination.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "PaginationComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/19",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/components/side-nav/side-nav.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "SideNavComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/core/controls/button/button.component.ts",
+                "type": "component",
+                "linktype": "component",
+                "name": "ButtonComponent",
+                "coveragePercent": 0,
+                "coverageCount": "0/7",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/http-interceptors/index.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "httpInterceptorProviders",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/http-interceptors/mockHttpInterceptor.ts",
+                "type": "interceptor",
+                "linktype": "interceptor",
+                "name": "MockHttpInterceptor",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/services/consents.service.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ConsentsService",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/actions/consents.action.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "AddConsents",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/actions/consents.action.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "AddConsentsFail",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/actions/consents.action.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "AddConsentsSuccess",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/actions/consents.action.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "GetConsents",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/actions/consents.action.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "GetConsentsFail",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/actions/consents.action.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "GetConsentsSuccesss",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/effects/consents.effect.ts",
+                "type": "injectable",
+                "linktype": "injectable",
+                "name": "ConsentsEffects",
+                "coveragePercent": 0,
+                "coverageCount": "0/4",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/effects/index.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "effects",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/redecuers/consents.reducer.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "ConsentsState",
+                "coveragePercent": 0,
+                "coverageCount": "0/3",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/redecuers/consents.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "consentsReducer",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/redecuers/consents.reducer.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "initialState",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/redecuers/index.ts",
+                "type": "interface",
+                "linktype": "interface",
+                "name": "State",
+                "coveragePercent": 0,
+                "coverageCount": "0/2",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/redecuers/index.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "metaReducers",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/redecuers/index.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "reducers",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/selectors/consents.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "consentsList",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/app/store/selectors/consents.selector.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "getConsents",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.dev.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.prod.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            },
+            {
+                "filePath": "src/environments/environment.ts",
+                "type": "variable",
+                "linktype": "miscellaneous",
+                "linksubtype": "variable",
+                "name": "environment",
+                "coveragePercent": 0,
+                "coverageCount": "0/1",
+                "status": "low"
+            }
+        ]
+    }
+}
