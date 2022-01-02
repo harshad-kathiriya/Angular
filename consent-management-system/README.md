@@ -1,22 +1,30 @@
-# Consent Management System
+# Introduction
+I have created this project to share my knowledge about angular. It consists of two pages: A consent collectoin form; where user enter consent data. A consent management; where user can see the list of consents with pagination.     
 
-### 1. Consent collection form
+<img src="https://user-images.githubusercontent.com/15572545/147866734-bbe578ab-6cee-4ff7-9233-2225b7ed63ee.png" width="90%" />
 
-A form that allows a user to enter her name, email address and to select data processes that she agrees to.
+<img src="https://user-images.githubusercontent.com/15572545/147866723-80ba8887-389f-4216-b87a-d4f24e769656.png" width="90%" />
 
-![Mockup](https://github.com/harshad-kathiriya/Angular-Projects/blob/main/consent-management-system/screenshots/give-consent.png)
+&nbsp;
 
+# Technologies
 
-### 2. Consent management
+- [Angular](https://angular.io/)
+- [NgRx](https://ngrx.io/)
 
-A list of consents that were given by users. This view simply displays items from a list with client-side pagination.
+## Testing And Documentation
 
-![Mockup](https://github.com/harshad-kathiriya/Angular-Projects/blob/main/consent-management-system/screenshots/consents.png)
+- [Jesmin](https://jasmine.github.io/)
+- [Compodoc](https://compodoc.app/)
 
+# Installation, development and usage
+
+## Dependencies
+Run `npm install` to install all the required dependencies.
 
 ## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` or `npm run start` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
@@ -28,7 +36,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Run `ng test` or `npm run test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 Here is the list of unit test write down for this app.
 
@@ -84,6 +92,60 @@ Lines        : 98.48% ( 130/132 )
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
+## Compodoc
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+To open Compodoc, use `npm run compodoc`.
+
+# Application Architecture
+
+## Structure
+
+Here is the code structure.
+
+```
+src/
+    app/
+        core/
+            components/
+              component-name
+            controls
+              control-name
+        feature-name
+            feature-page/
+            feature-module/
+            feature-routing/
+        services/
+        dto/
+        enums/
+        http-interceptors/
+        store/
+```
+
+#### Core folder
+
+Contains the common/shared components of the application, like a UI Library.
+
+#### Feature folder
+
+Contains all the different features of the project.
+
+#### Store Folder 
+Each feature has its store, with actions, reducers, selectors and effects:
+
+```
+store/
+    actions/
+        feature.actions.ts
+    effects/
+        feature.effects.ts
+    reducers/
+        index.ts
+        feature.reducers.ts
+    selectors/
+        feature.selectors.ts
+```
+
+
+## Style
+Follows the [BEM](http://getbem.com/introduction/) methodology for structuring
+components and naming the CSS classes.

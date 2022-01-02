@@ -31,21 +31,34 @@
                <div class="content getting-started">
                    <div class="content-data">
 
-<h1 id="consent-management-system">Consent Management System</h1>
-<h3 id="1-consent-collection-form">1. Consent collection form</h3>
-<p>A form that allows a user to enter her name, email address and to select data processes that she agrees to.</p>
-<p><img src="https://github.com/harshad-kathiriya/Angular-Projects/blob/main/consent-management-system/screenshots/give-consent.png" alt="Mockup" class="img-responsive"></p>
-<h3 id="2-consent-management">2. Consent management</h3>
-<p>A list of consents that were given by users. This view simply displays items from a list with client-side pagination.</p>
-<p><img src="https://github.com/harshad-kathiriya/Angular-Projects/blob/main/consent-management-system/screenshots/consents.png" alt="Mockup" class="img-responsive"></p>
+<h1 id="introduction">Introduction</h1>
+<p>I have created this project to share my knowledge about angular. It consists of two pages: A consent collectoin form; where user enter consent data. A consent management; where user can see the list of consents with pagination.     </p>
+<img src="https://user-images.githubusercontent.com/15572545/147866734-bbe578ab-6cee-4ff7-9233-2225b7ed63ee.png" width="90%" />
+
+<img src="https://user-images.githubusercontent.com/15572545/147866723-80ba8887-389f-4216-b87a-d4f24e769656.png" width="90%" />
+
+<p>&nbsp;</p>
+<h1 id="technologies">Technologies</h1>
+<ul>
+<li><a href="https://angular.io/">Angular</a></li>
+<li><a href="https://ngrx.io/">NgRx</a></li>
+</ul>
+<h2 id="testing-and-documentation">Testing And Documentation</h2>
+<ul>
+<li><a href="https://jasmine.github.io/">Jesmin</a></li>
+<li><a href="https://compodoc.app/">Compodoc</a></li>
+</ul>
+<h1 id="installation-development-and-usage">Installation, development and usage</h1>
+<h2 id="dependencies">Dependencies</h2>
+<p>Run <code>npm install</code> to install all the required dependencies.</p>
 <h2 id="development-server">Development server</h2>
-<p>Run <code>ng serve</code> for a dev server. Navigate to <code>http://localhost:4200/</code>. The app will automatically reload if you change any of the source files.</p>
+<p>Run <code>ng serve</code> or <code>npm run start</code> for a dev server. Navigate to <code>http://localhost:4200/</code>. The app will automatically reload if you change any of the source files.</p>
 <h2 id="code-scaffolding">Code scaffolding</h2>
 <p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate directive|pipe|service|class|guard|interface|enum|module</code>.</p>
 <h2 id="build">Build</h2>
 <p>Run <code>ng build</code> to build the project. The build artifacts will be stored in the <code>dist/</code> directory.</p>
 <h2 id="running-unit-tests">Running unit tests</h2>
-<p>Run <code>ng test</code> to execute the unit tests via <a href="https://karma-runner.github.io">Karma</a>.</p>
+<p>Run <code>ng test</code> or <code>npm run test</code> to execute the unit tests via <a href="https://karma-runner.github.io">Karma</a>.</p>
 <p>Here is the list of unit test write down for this app.</p>
 <div><pre class="line-numbers"><code class="language-sh">  ButtonComponent
     √ should create
@@ -94,8 +107,44 @@ Lines        : 98.48% ( 130/132 )
 ================================================================================
 </code></pre></div><h2 id="running-end-to-end-tests-will-add-later-on">Running end-to-end tests (will add later on)</h2>
 <p>Run <code>ng e2e</code> to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.</p>
-<h2 id="further-help">Further help</h2>
-<p>To get more help on the Angular CLI use <code>ng help</code> or go check out the <a href="https://angular.io/cli">Angular CLI Overview and Command Reference</a> page.</p>
+<h2 id="compodoc">Compodoc</h2>
+<p>To open Compodoc, use <code>npm run compodoc</code>.</p>
+<h1 id="application-architecture">Application Architecture</h1>
+<h2 id="structure">Structure</h2>
+<p>Here is the code structure.</p>
+<div><pre class="line-numbers"><code class="language-none">src/
+    app/
+        core/
+            components/
+              component-name
+            controls
+              control-name
+        feature-name
+            feature-page/
+            feature-module/
+            feature-routing/
+        services/
+        dto/
+        enums/
+        http-interceptors/
+        store/</code></pre></div><h4 id="core-folder">Core folder</h4>
+<p>Contains the common/shared components of the application, like a UI Library.</p>
+<h4 id="feature-folder">Feature folder</h4>
+<p>Contains all the different features of the project.</p>
+<h4 id="store-folder">Store Folder</h4>
+<p>Each feature has its store, with actions, reducers, selectors and effects:</p>
+<div><pre class="line-numbers"><code class="language-none">store/
+    actions/
+        feature.actions.ts
+    effects/
+        feature.effects.ts
+    reducers/
+        index.ts
+        feature.reducers.ts
+    selectors/
+        feature.selectors.ts</code></pre></div><h2 id="style">Style</h2>
+<p>Follows the <a href="http://getbem.com/introduction/">BEM</a> methodology for structuring
+components and naming the CSS classes.</p>
 
 
 
