@@ -147,5 +147,4 @@ store/
 
 
 ## Style
-Follows the [BEM](http://getbem.com/introduction/) methodology for structuring
-components and naming the CSS classes.
+Follows the [SASS](https://sass-lang.com/documentation) stylesheet language for naming the CSS classes.
